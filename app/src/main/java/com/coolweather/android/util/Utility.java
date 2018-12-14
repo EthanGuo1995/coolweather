@@ -14,15 +14,15 @@ public class Utility {
 	//解析和处理服务器返回的省级数据
 	public static boolean handleProvinceResponse(String response) {
 
-		if (!TextUtils.isEmpty(response)) {
+		if (!TextUtils.isEmpty(response)) {		//response是否不为空 -- 字符串两种空值的判断
 			try {
-				JSONArray allProvinces = new JSONArray(response);
-				for (int i = 0; i < allProvinces.length(); i++) {
-					JSONObject provinceObject = allProvinces.getJSONObject(i);
-					Province province = new Province();
-					province.setProvinceName(provinceObject.getString("name"));
-					province.setProvinceCode(provinceObject.getInt("id"));
-					province.save();
+				JSONArray allProvinces = new JSONArray(response);	//创建JSON字符数组
+				for (int i = 0; i < allProvinces.length(); i++) {	//遍历数组
+					JSONObject provinceObject = allProvinces.getJSONObject(i);	//获得每个元素
+					Province province = new Province();	//新建一个Province对象
+					province.setProvinceName(provinceObject.getString("name"));	//将数据库name指向的数据存进去
+					province.setProvinceCode(provinceObject.getInt("id"));	//将数据库id指向的数据存进去
+					province.save();	//保存
 				}
 				return true;
 			} catch (JSONException e) {
