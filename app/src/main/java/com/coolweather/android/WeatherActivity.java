@@ -1,6 +1,8 @@
 package com.coolweather.android;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -37,11 +39,19 @@ public class WeatherActivity extends AppCompatActivity {
 	private TextView comfortText;
 	private TextView carWashText;
 	private TextView sportText;
-	private ImageView bingPicImg;
+	private ImageView bingPicImg;	//必应每日一图
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		//Android5.0以上支持的功能 -- 新方法将背景和状态栏融合在一起
+		if (Build.VERSION.SDK_INT >= 21) {	//版本号 >= 21
+			View decorView = getWindow().getDecorView();	//获取当前活动的DecorView
+			decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+					| View.SYSTEM_UI_FLAG_LAYOUT_STABLE);	//活动布局显示在状态栏上面
+			getWindow().setStatusBarColor(Color.TRANSPARENT);	//将状态栏设为透明色
+		}
 		setContentView(R.layout.activity_weather);
 
 		//初始化各控件
@@ -58,8 +68,9 @@ public class WeatherActivity extends AppCompatActivity {
 		sportText = findViewById(R.id.sport_text);
 		bingPicImg = findViewById(R.id.bing_pic_img);
 
+		//获取SharedPreferences对象
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
+		//获取weather键对应的值
 		String weatherString = prefs.getString("weather", null);
 		if (weatherString != null) {
 			//有缓存时直接解析天气数据
